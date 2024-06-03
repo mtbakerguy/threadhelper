@@ -1,0 +1,15 @@
+This is a small infrastructure to make it easier to add small C/C++ libraries
+for various types of data mining.  It currently starts up N threads (the -t
+CLI option) and will hand stdin a line at a time to the underlying threads
+(NB:  the threads access this by the get_next_item() function in the
+passed in module struct (see oomkiller.cc's worker function).  It will then
+join all the threads together at the end.
+
+Additions to the micro-framework should be added with the appropriate
+function pointer in the module.h file.  Likewise, additional modules should
+be added to the Makefile.
+
+NB:  be particularly careful if you use global variables in your module.  In
+most cases, you'll solve this with Thread-Local Storage's use of the __thread
+storage class specifier.  For the unlikely case where you do want an actual
+global, you're responsible for your own locking.
